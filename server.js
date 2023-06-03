@@ -6,9 +6,7 @@ const prefix = "/";
 
 app.get("/", (req, res) => res.send("MEOW MEOW"));
 
-app.listen(PORT, () =>
-  console.log(`Your app is listening at http://localhost:${PORT}\n`)
-);
+app.listen(PORT, () => console.log(`Running at http://localhost:${PORT}\n`));
 
 app.use("/", (req, res) => {
   res.send(new Date());

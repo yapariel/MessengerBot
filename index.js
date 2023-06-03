@@ -4,11 +4,10 @@ const login = require("fca-unofficial");
 const { OpenAIApi, Configuration } = require("openai");
 
 let msgs = {};
-let vips = ["", "", ""]; //FB USER ID FOR VIPS
+let vips = ["", "", ""]; // INPUT FB USER ID FOR NO COOLDOWN
 let cd = {};
 
-const prefix = "/";
-const bot = "Jordi";
+const bot = "Ariel"; // BOT NAME YOU CAN CHANGE IF YOU WANT
 
 const openaiConfig = new Configuration({
   apiKey: process.env.API_KEY,
@@ -24,15 +23,16 @@ login(
       listenEvents: true,
       selfListen: true,
     });
+
     const listenEmitter = api.listen(async (err, event) => {
       if (err) return console.error(err);
-      const earl = event.body;
-      const args = earl.split(" ");
+      const ariel = event.body;
+      const args = ariel.split(" ");
 
-      if (earl.startsWith(prefix + "ask")) {
+      if (earl.toLowerCase().startsWith(bot.toLowerCase(bot))) {
         const userID = event.senderID;
         const isVip = vips.includes(userID);
-        const cooldownTime = isVip ? 0 : 180000; // COOLDOWN TIME
+        const cooldownTime = isVip ? 0 : 180000; // ADDED COOLDOWN TO AVOD SPAM
         const lastTime = cd[userID] || 0;
         const now = Date.now();
         const timeSinceLast = now - lastTime;
@@ -47,7 +47,7 @@ login(
           return;
         }
         cd[userID] = now;
-        api.setMessageReaction("😸", event.messageID, (err) => {}, true);
+        api.setMessageReaction("😸", event.messageID, (err) => {}, true); //BOT WILL REACT TO YOUR MESSAGE
         if (args.length < 2) {
           api.sendMessage(
             "Invalid command!\n\nCommand: /ask <ask anything>",
